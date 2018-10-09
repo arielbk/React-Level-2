@@ -1,13 +1,15 @@
 import styled from 'styled-components';
-import { elevation, transition, purp } from 'Utilities';
+import { elevation, transition } from 'Utilities';
 
 export const Card = styled.div`
   background: white;
   border-radius: 5px;
   padding: 1rem;
-  color: ${purp};
+  color: #000;
   ${elevation[4]};
-  ${transition({})};
+  ${transition({
+    property: 'box-shadow'
+  })};
   &:hover {
     ${elevation[2]};
   }
