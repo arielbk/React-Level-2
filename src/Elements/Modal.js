@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Transition } from 'react-spring';
+import { Transition, animated, config } from 'react-spring';
 import { Portal, absolute } from 'Utilities';
 import Icon from './Icon';
 import { Card } from './Cards';
@@ -11,6 +11,8 @@ export default class Modal extends Component {
     return (
       <Portal>
         <Transition
+          native
+          config={config.gentle}
           from={{ opacity: 0, bgOpacity: 0, y: -50 }}
           enter={{ opacity: 1, bgOpacity: 0.5, y:0 }}
           leave={{ opacity: 0, bgOpacity: 0, y: 50 }}
@@ -18,7 +20,8 @@ export default class Modal extends Component {
           { on && ( (styles) =>
             <ModalWrapper>
               <ModalCard style={{
-                transform: `translate3d(0, ${styles.y}px, 0)`,
+                transform: styles.y.interpolate(y => `translate3d(0, ${y}px, 0)`),
+                // `translate3d(0, ${styles.y}px, 0)`,
                 ...styles}}
               >
                 <CloseButton onClick={toggle}>
@@ -45,7 +48,9 @@ const ModalWrapper = styled.div`
   align-items: center;
 `;
 
-const ModalCard = styled(Card)`
+const AnimCard = Card.withComponent(animated.div);
+
+const ModalCard = styled(AnimCard)`
   z-index: 10;
   position: relative;
   min-width: 320px;
@@ -62,7 +67,8 @@ const CloseButton = styled.button`
   padding: 10px;
 `;
 
-const Background = styled.div`
+// this extends an 'animated div' to use native transitions
+const Background = styled(animated.div)`
   ${absolute({})};
   width: 100%;
   height: 100%;
